@@ -543,14 +543,14 @@ background: linear-gradient(90deg, rgba(97, 39, 107, 1) 35%, rgba(247, 0, 255, 1
   <i class="fa-solid fa-location-dot text-white"></i>
   شروع مسیریابی
 </button>
-          <a
-            href="#"
-            class="flex items-center justify-end gap-2 text-white"
-            onclick="event.preventDefault();"
-          >
-            <i class="fa-solid fa-user-plus text-slate-600 text-white"></i>
-            افزودن به مخاطبین
-          </a>
+        <button
+  type="button"
+  onclick="downloadVCard()"
+  class="flex items-center justify-end gap-2 text-white"
+>
+  <i class="fa-solid fa-user-plus text-white"></i>
+  افزودن به مخاطبین
+</button>
         </div>
 
         <!-- Floating call button -->
@@ -716,6 +716,38 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeMapChooser();
 });
+function downloadVCard() {
+  // اطلاعات مخاطب
+  const fullName = "آتنا اسماعیلی";
+  const phone1 = "+989201663024"; // شماره اصلی
+  const instagram = "https://instagram.com/attena_artt";
+  const telegram = "https://t.me/atena_art6";
+  const whatsapp = "https://wa.me/989201663024";
+
+  // vCard 3.0 (سازگار با اکثر گوشی‌ها)
+  const vcf =
+`BEGIN:VCARD
+VERSION:3.0
+N:اسماعیلی;آتنا;;;
+FN:${fullName}
+TEL;TYPE=CELL:${phone1}
+URL;TYPE=Instagram:${instagram}
+URL;TYPE=Telegram:${telegram}
+URL;TYPE=WhatsApp:${whatsapp}
+END:VCARD`;
+
+  const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "atena-esmaeili.vcf";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
 </script>
     <!-- Tailwind CDN -->
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
