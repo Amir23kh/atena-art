@@ -141,14 +141,14 @@ background: linear-gradient(90deg, rgba(97, 39, 107, 1) 35%, rgba(247, 0, 255, 1
         <!-- Buttons -->
         <div class="mt-6 flex items-center justify-center gap-3">
           <!-- Start route -->
-          <a
-            href="https://www.google.com/maps/dir/?api=1&destination=36.54247887322399,52.67498057665345"
-            target="_blank"
-            class="inline-flex w-40 items-center justify-center gap-2 rounded-lg location-class px-4 py-3 font-bold text-white shadow-sm active:scale-[0.99]"
-          >
-            <i class="fa-solid fa-location-dot"></i>
-            شروع مسیریابی
-          </a>
+        <button
+  type="button"
+  onclick="openMapChooser()"
+  class="inline-flex w-40 items-center justify-center gap-2 rounded-lg location-class px-4 py-3 font-bold text-white shadow-sm active:scale-[0.99]"
+>
+  <i class="fa-solid fa-location-dot"></i>
+  شروع مسیریابی
+</button>
 
           <!-- Share -->
           <button
@@ -169,7 +169,7 @@ background: linear-gradient(90deg, rgba(97, 39, 107, 1) 35%, rgba(247, 0, 255, 1
         <div class="space-y-4">
           <!-- item -->
           <a
-            href="tel:09356804015"
+            href="tel:+989201663024"
             class="group flex items-center gap-4 rounded-2xl bg-gray-100/80 p-4 shadow-sm hover:bg-gray-100"
           >
             <div
@@ -534,15 +534,15 @@ background: linear-gradient(90deg, rgba(97, 39, 107, 1) 35%, rgba(247, 0, 255, 1
         <div
           class="grid grid-cols-2 px-6 py-3 text-sm font-bold text-slate-700"
         >
-          <a
-            href="https://www.google.com/maps/dir/?api=1&destination=36.54247887322399,52.67498057665345"
-            target="_blank"
-            class="flex items-center justify-start gap-2 text-white"
-          >
-            <i class="fa-solid fa-location-dot text-slate-600 text-white"></i>
-            شروع مسیریابی
-          </a>
-
+          <!-- Start route -->
+<button
+  type="button"
+  onclick="openMapChooser()"
+  class="flex items-center justify-start gap-2 text-white"
+>
+  <i class="fa-solid fa-location-dot text-white"></i>
+  شروع مسیریابی
+</button>
           <a
             href="#"
             class="flex items-center justify-end gap-2 text-white"
@@ -563,7 +563,62 @@ background: linear-gradient(90deg, rgba(97, 39, 107, 1) 35%, rgba(247, 0, 255, 1
         </a>
       </div>
     </nav>
+<!-- Map Chooser Modal -->
+<div
+  id="mapChooser"
+  class="fixed inset-0 z-50 hidden items-end justify-center bg-black/60 p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="mapChooserTitle"
+>
+  <div class="w-full max-w-md rounded-2xl bg-white p-4 shadow-soft">
+    <div class="flex items-center justify-between">
+      <div id="mapChooserTitle" class="text-base font-bold text-slate-700">
+        انتخاب برنامه مسیریابی
+      </div>
+      <button
+        type="button"
+        onclick="closeMapChooser()"
+        class="text-2xl leading-none text-slate-500"
+        aria-label="close"
+      >
+        &times;
+      </button>
+    </div>
 
+    <div class="mt-4 grid grid-cols-2 gap-3 text-sm font-bold">
+      <a id="mapNeshan" target="_blank" rel="noopener noreferrer"
+         class="flex items-center justify-center rounded-xl border p-3 text-slate-700">
+        نشان
+      </a>
+
+      <a id="mapBalad" target="_blank" rel="noopener noreferrer"
+         class="flex items-center justify-center rounded-xl border p-3 text-slate-700">
+        بلد
+      </a>
+
+      <a id="mapGoogle" target="_blank" rel="noopener noreferrer"
+         class="flex items-center justify-center rounded-xl border p-3 text-slate-700">
+        گوگل‌مپ
+      </a>
+
+      <a id="mapApple" target="_blank" rel="noopener noreferrer"
+         class="flex items-center justify-center rounded-xl border p-3 text-slate-700">
+        اپل‌مپ
+      </a>
+    </div>
+
+    <div class="mt-4">
+      <button
+        type="button"
+        onclick="closeMapChooser()"
+        class="w-full rounded-xl bg-slate-100 p-3 text-sm font-bold text-slate-700"
+      >
+        بستن
+      </button>
+    </div>
+  </div>
+</div>
     <!-- Share (optional, small JS) -->
     <script>
   const shareBtn = document.getElementById("shareBtn");
@@ -614,6 +669,53 @@ background: linear-gradient(90deg, rgba(97, 39, 107, 1) 35%, rgba(247, 0, 255, 1
       closeModal();
     }
   });
+  // ===== Map Chooser =====
+const DEST_LAT = "36.54268445775079";
+const DEST_LNG = "52.67509248026559";
+
+function buildMapLinks() {
+  const google = `https://www.google.com/maps/dir/?api=1&destination=${DEST_LAT},${DEST_LNG}`;
+  const apple = `https://maps.apple.com/?daddr=${DEST_LAT},${DEST_LNG}`;
+
+  const neshan = `https://neshan.org/maps?destination=${DEST_LAT},${DEST_LNG}`;
+  const balad = `https://balad.ir/direction?destination=${DEST_LAT},${DEST_LNG}`;
+
+  const aNeshan = document.getElementById("mapNeshan");
+  const aBalad = document.getElementById("mapBalad");
+  const aGoogle = document.getElementById("mapGoogle");
+  const aApple = document.getElementById("mapApple");
+
+  if (aNeshan) aNeshan.href = neshan;
+  if (aBalad) aBalad.href = balad;
+  if (aGoogle) aGoogle.href = google;
+  if (aApple) aApple.href = apple;
+}
+
+function openMapChooser() {
+  buildMapLinks();
+  const modal = document.getElementById("mapChooser");
+  modal?.classList.remove("hidden");
+  modal?.classList.add("flex");
+}
+
+function closeMapChooser() {
+  const modal = document.getElementById("mapChooser");
+  modal?.classList.add("hidden");
+  modal?.classList.remove("flex");
+}
+
+// close by clicking outside
+document.addEventListener("click", (e) => {
+  const modal = document.getElementById("mapChooser");
+  if (!modal) return;
+  if (!modal.classList.contains("flex")) return;
+  if (e.target === modal) closeMapChooser();
+});
+
+// close with ESC
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeMapChooser();
+});
 </script>
     <!-- Tailwind CDN -->
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
